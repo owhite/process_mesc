@@ -10,6 +10,17 @@ def get_web_page(req):
         response.close()
         return(the_page)
         
+def get_file_page(fname): # includes path
+    try:
+        f = open(fname, 'rb')
+    except OSError:
+        print ("Could not open/read file:", fname)
+        sys.exit()
+
+    with f:
+        the_page = f.read()
+        return(the_page)
+        
 def make_frame(page): 
     lines = page.splitlines();
 

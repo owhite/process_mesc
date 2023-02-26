@@ -9,8 +9,9 @@ import parse_data # helper script
 # URL = 'https://raw.githubusercontent.com/owhite/ebike_data/main/datasets/first_set'
 # page = parse_data.get_web_page(URL)
 # fname = 'datasets/feb25_FW20.json'
-fname = 'datasets/feb26_FW30_8000w.json'
-title = 'FW=30, p_max =8000'
+fname = 'datasets/feb26_FW30_150A_10kw.json'
+
+title = 'FW=30, 10kw, 150A, underload'
 page = parse_data.get_file_page(fname)
 data = parse_data.make_frame(page)
 
@@ -38,7 +39,7 @@ fig.legend(loc = "upper left")
 color = 'tab:blue'
 ax1.set_ylabel('phaseA', color=color)  
 ax1.tick_params(axis='y', labelcolor=color)
-ax1.set_ylim(0, 40)
+ax1.set_ylim(0, 140)
 ax1.plot(t, df['phaseA'], color=color, label = 'phase A')
 fig.legend(loc = "upper left")
 

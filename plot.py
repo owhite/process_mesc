@@ -8,7 +8,8 @@ import parse_data # helper script
 # URL = input()
 # URL = 'https://raw.githubusercontent.com/owhite/ebike_data/main/datasets/first_set'
 # page = parse_data.get_web_page(URL)
-fname = 'datasets/feb25_FW30_8000kw.json'
+# fname = 'datasets/feb25_FW20.json'
+fname = 'datasets/feb26_FW30_8000w.json'
 title = 'FW=30, p_max =8000'
 page = parse_data.get_file_page(fname)
 data = parse_data.make_frame(page)

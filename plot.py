@@ -9,14 +9,12 @@ import parse_data # helper script
 # URL = 'https://raw.githubusercontent.com/owhite/ebike_data/main/datasets/first_set'
 # page = parse_data.get_web_page(URL)
 # fname = 'datasets/feb25_FW20.json'
-fname = 'datasets/feb25_FW30.json'
 fname = 'datasets/feb26_FW30_250MAX_200A_12kw.json'
 
+the_page = parse_data.get_json_file(fname)
+title = the_page['title']
 
-title = 'FW=30, 12kw, 250MAX, 200A'
-page = parse_data.get_file_page(fname)
-data = parse_data.make_frame(page)
-
+data = parse_data.make_frame(the_page['data'])
 df = pd.DataFrame(data)
 
 df['phaseA'] = np.sqrt( (df['idq_d'] * df['idq_d']) + (df['idq_q'] * df['idq_q']) )
@@ -48,13 +46,15 @@ ax1.set_ylim(0, 140)
 ax1.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 
-datatype = 'idq_req'
-color = 'tab:green'
-ax2.set_ylabel(datatype, color=color)  
-ax2.tick_params(axis='y', labelcolor=color)
-ax2.set_ylim(1, 220)
-ax2.plot(t, df[datatype], color=color, label = datatype)
-fig.legend(loc = "upper left")
+show_idq = 1
+if show_idq == 1:
+    datatype = 'idq_req'
+    color = 'tab:green'
+    ax2.set_ylabel(datatype, color=color)  
+    ax2.tick_params(axis='y', labelcolor=color)
+    ax2.set_ylim(1, 220)
+    ax2.plot(t, df[datatype], color=color, label = datatype)
+    fig.legend(loc = "upper left")
 
 datatype = 'vbus'
 color = 'black'

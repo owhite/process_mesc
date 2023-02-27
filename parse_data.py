@@ -10,46 +10,25 @@ def get_web_page(req):
         response.close()
         return(the_page)
         
-def get_file_page(fname): # includes path
-    try:
-        f = open(fname, 'rb')
-    except OSError:
-        print ("Could not open/read file:", fname)
-        sys.exit()
-
-    with f:
-        the_page = f.read()
+def get_json_file(fname):
+    with open(fname, 'r') as fcc_file:
+        the_page = json.load(fcc_file)
         return(the_page)
-        
-def make_frame(page): 
-    lines = page.splitlines();
 
+def make_frame(lines): 
     names = []
-    sets = []
-    i = 0
+    sets = {}
 
-    for key in json.loads(lines[0]).keys():
+    for key in lines[0].keys():
         names.append(key)
-        sets.append([])
-        i = i + 1
+        sets[key] = []
 
-    count = 0
-    x = []
     for line in lines:
-        js = json.loads(line)
-        x.append(count)
-        count = count + 1
-        i = 0
-        for n in names:
-            sets[i].append(js[n])
-            i = i + 1
+        for name in names:
+            sets[name].append(line[name])
 
     my_dict = {}
-    i = 0
-    for key in json.loads(lines[0]).keys():
-        thing = {names[i]: sets[i]}
-        my_dict.update(thing)
-        i = i + 1
+    for name in names:
+        my_dict.update({name: sets[name]})
         
     return(my_dict)
-

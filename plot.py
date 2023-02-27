@@ -9,9 +9,11 @@ import parse_data # helper script
 # URL = 'https://raw.githubusercontent.com/owhite/ebike_data/main/datasets/first_set'
 # page = parse_data.get_web_page(URL)
 # fname = 'datasets/feb25_FW20.json'
-fname = 'datasets/feb26_FW30_150A_10kw.json'
+fname = 'datasets/feb25_FW30.json'
+fname = 'datasets/feb26_FW30_250MAX_200A_12kw.json'
 
-title = 'FW=30, 10kw, 150A, underload'
+
+title = 'FW=30, 12kw, 250MAX, 200A'
 page = parse_data.get_file_page(fname)
 data = parse_data.make_frame(page)
 
@@ -25,7 +27,9 @@ fig, host = plt.subplots()
 fig.subplots_adjust(right=0.75)
 ax1 = host.twinx()
 ax2 = host.twinx()
-ax2.spines.right.set_position(("axes", 1.15))
+ax3 = host.twinx()
+ax2.spines.right.set_position(("axes", 1.1))
+ax3.spines.right.set_position(("axes", 1.2))
 
 fig.suptitle(title, fontsize=16)
 color = 'tab:red'
@@ -37,20 +41,28 @@ host.plot(t, df['ehz'], color=color, label = 'ehz')
 fig.legend(loc = "upper left")
 
 color = 'tab:blue'
-ax1.set_ylabel('phaseA', color=color)  
+datatype = 'phaseA'
+ax1.set_ylabel(datatype, color=color)  
 ax1.tick_params(axis='y', labelcolor=color)
 ax1.set_ylim(0, 140)
-ax1.plot(t, df['phaseA'], color=color, label = 'phase A')
+ax1.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 
-offset = 60
+datatype = 'idq_req'
 color = 'tab:green'
-ax2.set_ylabel('Vbus', color=color)  
+ax2.set_ylabel(datatype, color=color)  
 ax2.tick_params(axis='y', labelcolor=color)
-ax2.set_ylim(40, 90)
-ax2.plot(t, df['vbus'], color=color, label = 'Vbus')
+ax2.set_ylim(1, 220)
+ax2.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 
+datatype = 'vbus'
+color = 'black'
+ax3.set_ylabel(datatype, color=color)  
+ax3.tick_params(axis='y', labelcolor=color)
+ax3.set_ylim(60, 80)
+ax3.plot(t, df[datatype], color=color, label = datatype)
+fig.legend(loc = "upper left")
 
 
 # plt.show()

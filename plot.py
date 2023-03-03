@@ -8,8 +8,9 @@ import parse_data # helper script
 # URL = input()
 # URL = 'https://raw.githubusercontent.com/owhite/ebike_data/main/datasets/first_set'
 # page = parse_data.get_web_page(URL)
-# fname = 'datasets/feb25_FW20.json'
-fname = 'datasets/feb26_FW30_250MAX_200A_12kw.json'
+fname = 'datasets/mar2_F40_w_cap.json'
+
+print (fname)
 
 the_page = parse_data.get_json_file(fname)
 title = the_page['title']
@@ -46,21 +47,19 @@ ax1.set_ylim(0, 140)
 ax1.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 
-show_idq = 1
-if show_idq == 1:
-    datatype = 'idq_req'
-    color = 'tab:green'
-    ax2.set_ylabel(datatype, color=color)  
-    ax2.tick_params(axis='y', labelcolor=color)
-    ax2.set_ylim(1, 220)
-    ax2.plot(t, df[datatype], color=color, label = datatype)
-    fig.legend(loc = "upper left")
+datatype = 'adc_req'
+color = 'tab:green'
+ax2.set_ylabel(datatype, color=color)  
+ax2.tick_params(axis='y', labelcolor=color)
+ax2.set_ylim(0, 1.1)
+ax2.plot(t, df[datatype], color=color, label = datatype)
+fig.legend(loc = "upper left")
 
 datatype = 'vbus'
 color = 'black'
 ax3.set_ylabel(datatype, color=color)  
 ax3.tick_params(axis='y', labelcolor=color)
-ax3.set_ylim(60, 80)
+ax3.set_ylim(50, 80)
 ax3.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 

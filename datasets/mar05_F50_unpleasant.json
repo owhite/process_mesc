@@ -1,7 +1,11 @@
 {
-    "title": "FW=50, MAX=250A, unpleasant #1",
+
+
+    "title": "FW=50, MAX=250A, error = 1 at sample 82",
     "FW": 50,
     "data": [
+
+{"adc_ext1":798,"ehz":-0.196892,"error":0,"FW_curr_req":0.000000,"idq_d":2.912066,"idq_q":-4.384166,"MOS_temp":291.865356,"MOT_temp":209.781189,"vbus":69.303810},
 {"adc_ext1":797,"ehz":-0.282341,"error":0,"FW_curr_req":0.000000,"idq_d":2.896800,"idq_q":-4.410852,"MOS_temp":291.866669,"MOT_temp":209.827621,"vbus":69.329033},
 {"adc_ext1":798,"ehz":-0.169425,"error":0,"FW_curr_req":0.000000,"idq_d":2.896501,"idq_q":-4.335188,"MOS_temp":291.867828,"MOT_temp":209.887039,"vbus":69.329033},
 {"adc_ext1":798,"ehz":-0.276237,"error":0,"FW_curr_req":0.000000,"idq_d":2.928930,"idq_q":-4.394490,"MOS_temp":291.866394,"MOT_temp":209.818634,"vbus":69.329033},
@@ -260,7 +264,6 @@
 {"adc_ext1":797,"ehz":-0.279054,"error":1,"FW_curr_req":-49.500000,"idq_d":32.495201,"idq_q":-33.896698,"MOS_temp":292.765808,"MOT_temp":209.878967,"vbus":68.900291},
 {"adc_ext1":796,"ehz":-0.291260,"error":1,"FW_curr_req":-49.500000,"idq_d":32.504368,"idq_q":-33.893574,"MOS_temp":292.760956,"MOT_temp":209.856964,"vbus":68.900291},
 {"adc_ext1":797,"ehz":-0.306518,"error":1,"FW_curr_req":-49.500000,"idq_d":32.531906,"idq_q":-33.942455,"MOS_temp":292.756409,"MOT_temp":209.839844,"vbus":68.875076}
-
     ]
 }
 

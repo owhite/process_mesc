@@ -105,7 +105,7 @@ def display():
         char = 'uc'
 
     for row in keylist:
-        btn = tk.Label(key, text=row[char], padx = 4, borderwidth=1, relief="solid")
+        btn = tk.Label(key, font=font, text=row[char], padx = 4, borderwidth=1, relief="solid")
         btn.grid(column=row['col'], row=row['row'], columnspan = row['span'], sticky="news", padx = 2, pady = 2)
         if row[char] == 'Sh':
             btn.bind("<Button-1>", lambda event, btn=btn: Shift())
@@ -121,7 +121,7 @@ def display():
 def force_display(): # uppercase is larger, run once to set size
     char = 'uc'
     for row in keylist:
-        btn = tk.Label(key, text=row[char], padx = 4, borderwidth=1, relief="solid")
+        btn = tk.Label(key, font=font, text=row[char], padx = 4, borderwidth=1, relief="solid")
         btn.grid(column=row['col'], row=row['row'], columnspan = row['span'], sticky="news", padx = 2, pady = 2)
         if row[char] == 'Sh':
             btn.bind("<Button-1>", lambda event, btn=btn: Shift())

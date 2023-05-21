@@ -28,7 +28,9 @@ title = the_page['title']
 data = parse_data.make_frame(the_page['data'])
 df = pd.DataFrame(data)
 
-df['phaseA'] = np.sqrt( (df['idq_d'] * df['idq_d']) + (df['idq_q'] * df['idq_q']) )
+# {"adc1":740,"ehz":0.161,"error":0,"id":0.197,"iq":0.094,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":72.481,"Vd":1.928,"Vq":0.586},
+
+df['phaseA'] = np.sqrt( (df['id'] * df['id']) + (df['iq'] * df['iq']) )
 
 t = np.arange(len(df['ehz']))
 
@@ -42,7 +44,7 @@ ax3.spines.right.set_position(("axes", 1.2))
 
 fig.suptitle(title, fontsize=16)
 color = 'tab:red'
-host.set_ylim(0, 550)
+host.set_ylim(0, 740)
 host.set_xlabel("Samples", color='black')
 host.tick_params(axis='y', labelcolor=color)
 host.set_ylabel("ehz", color=color)
@@ -53,23 +55,23 @@ color = 'tab:blue'
 datatype = 'phaseA'
 ax1.set_ylabel(datatype, color=color)  
 ax1.tick_params(axis='y', labelcolor=color)
-ax1.set_ylim(0, 140)
+ax1.set_ylim(0, 300)
 ax1.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 
-datatype = 'FW_curr_req'
+datatype = 'iqreq'
 color = 'tab:green'
 ax2.set_ylabel(datatype, color=color)  
 ax2.tick_params(axis='y', labelcolor=color)
-ax2.set_ylim(-50, 50)
+ax2.set_ylim(0, 400)
 ax2.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 
-datatype = 'adc_ext1'
+datatype = 'adc1'
 color = 'black'
 ax3.set_ylabel(datatype, color=color)  
 ax3.tick_params(axis='y', labelcolor=color)
-ax3.set_ylim(0, 4200)
+ax3.set_ylim(700, 4200)
 ax3.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 

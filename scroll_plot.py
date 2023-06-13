@@ -4,6 +4,7 @@ import sys, getopt
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib as mpl
 import numpy as np
 import parse_data # helper script
 import random
@@ -36,6 +37,7 @@ t = np.arange(len(df['ehz']))
 
 fig, host = plt.subplots(figsize=(14,5))
 fig.subplots_adjust(right=0.75)
+
 ax1 = host.twinx()
 ax2 = host.twinx()
 ax3 = host.twinx()
@@ -50,6 +52,16 @@ host.tick_params(axis='y', labelcolor=color)
 host.set_ylabel("ehz", color=color)
 host.plot(t, df['ehz'], color=color, label = 'ehz')
 fig.legend(loc = "upper left")
+
+N = 21
+cmap = plt.get_cmap("jet", N)
+sm = plt.cm.ScalarMappable(cmap=cmap, norm=mpl.colors.Normalize(vmin=0, vmax=N))
+sm.set_array([])
+ticks = np.linspace(0, N - 1, int((N + 1) / 2))
+labels = np.linspace(0, 2, int((N + 1) / 2))
+boundaries = np.linspace(0, N, N + 1) - 0.5
+cbar = plt.colorbar(sm, ticks=ticks, boundaries=boundaries, shrink=0.9, pad=0.1, location="left")
+
 
 color = 'tab:blue'
 datatype = 'phaseA'
@@ -77,13 +89,7 @@ fig.legend(loc = "upper left")
 
 np.random.seed(19680801)
 
-# Compute areas and colors
-N = 150
-r = 2 * np.random.rand(N)
-theta = 2 * np.pi * np.random.rand(N)
-area = 200 * r**2
-colors = theta
-
+# Throttle
 ax5 = fig.add_axes([0.1, 0.6, 0.20, 0.20], polar=True)
 ax5.set_rticks([])
 ax5.set_thetamin(-30)
@@ -91,15 +97,36 @@ ax5.set_thetamax(30)
 ax5.grid(False)
 ax5.tick_params(axis='y', pad=0, left=True, length=6, width=1, direction='inout')
 
-def animate(i,vl, t2, axis):
+# Elevation
+ax6 = fig.add_axes([0.6, 0.6, 0.20, 0.20], polar=True)
+ax6.set_rticks([])
+ax6.set_thetamin(90)
+ax6.set_thetamax(-30)
+ax6.grid(False)
+ax6.tick_params(axis='y', pad=0, left=True, length=6, width=1, direction='inout')
+
+
+def map_range(x, in_min, in_max, out_min, out_max):
+  return (x - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
+
+def animate(i, vl, t2, axis1, axis2, array1, array2):
     degree = random.randint(-30, 30)
     rad = np.deg2rad(degree)
-    axis.clear() # each time this is called you have to reset everything else: ticks, etc. 
-    ax5.set_rticks([])
-    ax5.set_thetamin(-30)
-    ax5.set_thetamax(30)
-    ax5.grid(False)
-    axis.plot([rad,rad], [0,1], color="black", linewidth=2)
+
+    axis1.clear() # each time this is called you have to reset everything else: ticks, etc. 
+    axis1.set_rticks([])
+    axis1.set_thetamin(-30)
+    axis1.set_thetamax(30)
+    axis1.grid(False)
+    axis1.plot([rad,rad], [0,1], color="black", linewidth=3)
+
+    rad = np.deg2rad(map_range(array2[i], 740, 3994, -30, 90))
+    axis2.clear() 
+    axis2.set_rticks([])
+    axis2.set_thetamin(90)
+    axis2.set_thetamax(-30)
+    axis2.grid(False)
+    axis2.plot([rad,rad], [0,1], color="black", linewidth=2)
 
     vl.set_xdata([i,i])
     # interval is in millisecs, and seems to be working okay
@@ -115,6 +142,8 @@ freq = 10 # Hz
 
 start = time.perf_counter()
 
-ani = animation.FuncAnimation(fig, animate, frames=frames, fargs=(vl, start, ax5), interval=100) 
+ani = animation.FuncAnimation(fig, animate, frames=frames,
+                              fargs=(vl, start, ax5, ax6, df['adc1'], df['adc1']),
+                              interval=100) 
 
 plt.show()

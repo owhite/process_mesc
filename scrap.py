@@ -1,14 +1,15 @@
 #! /usr/bin/env python3
 
-import moviepy.editor as mp
+import matplotlib.pyplot as plt
+import numpy as np
 
-video = mp.VideoFileClip("dummy2.mp4");
+data = np.random.rand(100,1)
 
-logo = (mp.ImageClip("thing.png")
-          .set_duration(video.duration)
-          .resize(height=200) # if you need to resize...
-          .margin(right=8, top=8, opacity=0) # (optional) logo-border padding
-          .set_pos(("right","top")))
+fig, ax = plt.subplots(1,2)
+p1 = ax[0].pcolormesh(data)
+p2 = ax[1].pcolormesh(data)
 
-final = mp.CompositeVideoClip([video, logo])
-final.write_videofile("test.mp4")
+plt.colorbar(p1,ax=ax[0])
+plt.colorbar(p2,ax=ax[1])
+
+plt.show()

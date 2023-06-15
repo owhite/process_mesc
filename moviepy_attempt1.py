@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 
+import moviepy.editor as mp
+
 import sys, getopt
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -43,73 +45,67 @@ bar_width = .8
 
 y = the_page['bar_displays']
 
-# groom these
-data_types = {}
-for n in the_page['bar_displays']:
-    data_types[n] = n
-    if n == 'iqreq':
-        data_types[n] = 'req'
-    if n == 'phaseA':
-        data_types[n] = 'amp'
+video = mp.VideoFileClip("druid_hill_climb2.mp4")
 
-def create_plot(ax, row):
+inserts = [video]
+time_point = 0
+time_inc = 0.1
+files = []
+
+for row in list(range(data_length)):
     count = 0
     labels = []
+    names = []
     values = []
     widths = []
-    names = []
     for item in the_page['bar_displays']:
         if the_page['bar_displays'][item]:
             widths.append(bar_width)
-            names.append(data_types[item])
+            names.append(item)
             values.append(df_scaled[item][row])
             labels.append(int(df[item][row]))
             count = count + 1
 
-    b = ax.bar(names, values, width = widths)
-    ax.set(ylabel='', title='', ylim=(0, 1))
-    ax.set_axis_off()
-
-    fig.colorbar(b, ax=ax)
-    
+        fig, ax = plt.subplots(figsize=(2,3))
+        ax.bar(names, values, width = widths)
+        ax.set(ylabel='', title='', ylim=(0, 1))
+        ax.set_axis_off()
 
     rects = ax.patches
     count = 0
-
     for rect in rects:
         label = labels[count]
         height = rect.get_height() + .02
-        ax.text(count, height, label, ha = 'center', fontsize=12)
-        ax.text(count, -.1, names[count], ha = 'center', fontsize=12, color = 'black')
+        plt.text(count, height, label, ha = 'center', fontsize=12)
+        n = names[count]
+        if n == 'iqreq':
+            n = 'req'
+        if n == 'phaseA':
+            n = 'amp'
+        plt.text(count, -.1, n, ha = 'center', fontsize=12, color = 'black')
         count = count + 1
 
+    n =  "image{:05d}.png".format(row)
+    files.append(n)
+    print (row, data_length, n)
+    fig.savefig(n, transparent = True)
 
-def map_range(x, in_min, in_max, out_min, out_max):
-  return (x - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
+    insert = (mp.ImageClip(n)
+             .set_start(time_point)
+             .set_duration(time_inc)
+             .resize(height=200) # if you need to resize...
+             .margin(right=20, top=20, opacity=0) # (optional) logo-border padding
+             .set_pos(("right","top")))
 
-def create_throttle(ax, value):
-    # Throttle
-    ax.tick_params(axis='y', pad=0, left=True, length=6, width=1, direction='inout')
-    rad = np.deg2rad(map_range(value, 740, 3994, -30, 90))
-    ax.set_xticklabels(['', '',])
-    ax.set_rticks([])
-    ax.set_thetamin(90)
-    ax.set_thetamax(-30)
-    ax.grid(False)
-    ax.plot([rad,rad], [0,1], color="black", linewidth=2)
-    ax.set_title("Spread")
-    
-fig = plt.figure()
-fig.set_figheight(7)
-fig.set_figwidth(3)
-ax1 = plt.subplot2grid(shape=(2, 2), loc=(0, 0), colspan=2)
-ax2 = plt.subplot2grid(shape=(2, 2), loc=(1, 0), colspan=1, polar=True)
+    time_point = time_point + time_inc
+    inserts.append(insert)
+    plt.close(fig)
 
-create_plot(ax1, 133)
-create_throttle(ax2, df['adc1'][133])
+for f in files:
+    os.remove(f) 
 
-# n =  "image{:05d}.png".format(row)
-# print (row, data_length, n)
-# fig.savefig(n, transparent = True)
+print (inserts)
+final = mp.CompositeVideoClip(inserts)
 
-plt.show()
+final.write_videofile("test.mp4")
+

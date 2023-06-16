@@ -3,13 +3,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = np.random.rand(100,1)
+fig = plt.figure(figsize = (1,4))
 
-fig, ax = plt.subplots(1,2)
-p1 = ax[0].pcolormesh(data)
-p2 = ax[1].pcolormesh(data)
+array = []
+for i in np.arange(0, 1, .04):
+    x = []
+    x=[i]
+    array.append(x)
 
-plt.colorbar(p1,ax=ax[0])
-plt.colorbar(p2,ax=ax[1])
+cmap=plt.cm.jet
+plt.pcolormesh(array , cmap = cmap )
 
 plt.show()
+

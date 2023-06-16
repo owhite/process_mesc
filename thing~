@@ -1,3 +1,0 @@
-
-
-ffmpeg -i Downloads/druid_hill_climb2.mp4 -i process_mesc/druid_hill_climb2.mp4 -filter_complex hstack=inputs=2:shortest=1 shortest-output.mp4

@@ -144,7 +144,7 @@ def animate(i, vl, t2, axis1, axis2, array1, array2):
 
     print (len(df['ehz']), i)
 
-    # vl.set_xdata([i,i])
+    vl.set_xdata([i,i])
     # interval is in millisecs, and seems to be working okay
     #  to test, uncomment:
     # print (int((time.perf_counter() - t2) * 100))
@@ -162,8 +162,8 @@ ani = animation.FuncAnimation(fig, animate, frames=frames,
                               fargs=(vl, start, ax1, ax1, df['adc1'], df['adc1']),
                               interval=100, repeat=False) 
 
-writervideo = animation.FFMpegWriter(fps=8.18)
-ani.save('dummy.mp4', writer=writervideo)
-# plt.show()
-plt.close()
+# writervideo = animation.FFMpegWriter(fps=8.18)
+# ani.save('dummy.mp4', writer=writervideo)
+plt.show()
+# plt.close()
 

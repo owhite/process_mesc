@@ -1,8 +1,10 @@
 #! /usr/bin/env python3
 
+import moviepy.editor as mp
 import sys, getopt
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from matplotlib import gridspec
 import numpy as np
 import parse_data # helper script
@@ -22,9 +24,20 @@ for opt, arg in opts:
         fname = arg
 
 the_page = parse_data.get_json_file(fname)
+
 title = the_page['title']
+mname = the_page['movie']
+start_sec = the_page['start_sec']
+data_collection_period = the_page['data_collection_period']
 
 data = parse_data.make_frame(the_page['data'])
+
+video = mp.VideoFileClip(mname)
+duration = video.duration
+fps = video.fps
+
+data = parse_data.pad_data_set(data, data_collection_period, start_sec, duration)
+
 df = pd.DataFrame(data)
 df_scaled = df.copy()
 
@@ -59,6 +72,7 @@ def create_bargraph(ax, row, place_box):
     widths = []
     names = []
     count = 0
+    ax.clear() 
     for item in the_page['bar_displays']:
         if the_page['bar_displays'][item]:
             widths.append(bar_width)
@@ -87,23 +101,22 @@ def map_range(x, in_min, in_max, out_min, out_max):
   return (x - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
 
 def create_throttle(ax, value, place_box):
-    # Throttle
-    # ax.tick_params(axis='y', pad=0, left=True, length=6, width=1, direction='inout')
     rad = np.deg2rad(map_range(value, 740, 3994, -30, 90))
     ax.set_theta_zero_location('SE')
-    # ax.set_theta_direction(-1)
-    # ax.set_xticklabels(['ZERO', 'FULL', 'C', 'D',])
     ax.xaxis.set_tick_params(labelbottom=False)
     ax.set_rticks([])
     ax.set_thetamin(120)
     ax.set_thetamax(0)
     ax.grid(False)
-    ax.plot([rad,rad], [0,1], color="black", linewidth=2)
+    q = 20
+    bars = ax.bar(rad/2, q, width=rad, color='red')
+
+    # ax.plot([rad,rad], [0,1], color='black', linewidth=2)
     ax.set_title("Throttle")
     if place_box:
         bound_box(ax)
     
-def create_temp(ax, min, max, place_box):
+def create_temp(ax, temp, min, max, place_box):
     array = []
     rows = 25
     for i in np.arange(0, 1, 1 / rows):
@@ -116,7 +129,7 @@ def create_temp(ax, min, max, place_box):
     ax.set_yticks((0, rows))
     ax.set_yticklabels((min, max))
 
-    p = map_range(75, min, max, 0, rows)
+    p = map_range(temp, min, max, 0, rows)
 
     ax.pcolor(array , cmap = cmap )
     t = ax.text(-0.1, p, " ",
@@ -150,6 +163,12 @@ def bound_box(ax):
     ypad = 0.05 * height
     fig.add_artist(plt.Rectangle((x0-xpad, y0-ypad), width+2*xpad, height+2*ypad, edgecolor='red', linewidth=3, fill=False))
 
+def animate(i, total, a0, a1, a2, a3, show_box):
+    print(i, total)
+    # create_bargraph(a0, i, show)
+    # create_temp(a1, 75, the_page['min_temp'], the_page['max_temp'], show)
+    # create_throttle(a2, df['adc1'][i], show)
+    # create_elevation(a3, 20, show)
 
 fig = plt.figure()
 fig.set_figheight(7)
@@ -165,14 +184,16 @@ ax2 = fig.add_subplot(gs[1,0], polar=True)
 ax3 = fig.add_subplot(gs[1,1], polar=True)
 
 show = False
-create_bargraph(ax0, 133, show)
-create_temp(ax1, 25, 100, show)
-create_throttle(ax2, df['adc1'][133], show)
-create_elevation(ax3, 20, show)
 
-# n =  "image{:05d}.png".format(row)
-# print (row, data_length, n)
-# fig.savefig(n, transparent = true)
+key = list(data.keys())[0]
+frames = len(data[key])
 
+ani = animation.FuncAnimation(fig, animate, frames=frames,
+                              fargs=(frames, ax0, ax1, ax2, ax3, show),
+                              interval=100, repeat=False) 
+
+# writervideo = animation.FFMpegWriter(fps=60)
+# ani.save('dummy.mp4', writer=writervideo)
 plt.show()
+plt.close()
 

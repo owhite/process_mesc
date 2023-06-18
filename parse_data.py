@@ -41,6 +41,12 @@ def pad_data_set(array, speed, start_s, vid_len):
     front_pad = int(start_s * speed)
     end_pad = int(end_sec * speed)
 
+    d = {}
+    d['data'] = array
+    d['front_pad']= front_pad
+    d['data_len'] = len(row)
+    d['end_pad']= end_pad
+
     for item in array:
         row = array[item]
         l1 = [row[0]] * front_pad
@@ -53,4 +59,5 @@ def pad_data_set(array, speed, start_s, vid_len):
     print('adding {0}(secs) {1}(frames) to end'.format(end_sec, end_pad))
     print('{0}(secs) {1}(frames) final dataset'.format(len(array[item]) / speed, len(array[item])))
 
-    return(array)
+
+    return(d)

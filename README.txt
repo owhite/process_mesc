@@ -1,6 +1,14 @@
 Duration needed:
 181 - 67s = 114
 
+### make transparent webm output
+ffmpeg -framerate 10 -pattern_type glob -i "images/*.png" -r 30  -pix_fmt yuva420p output.webm
+
+## then, overlay webm on mp4
+ffmpeg -i druid_hill_climb2.mp4 -c:v libvpx-vp9 -i output.webm -filter_complex overlay output.mp4
+
+
+
 Use this in scroll_plot to stretch to correct duration
 writervideo = animation.FFMpegWriter(fps=8.18)
 
@@ -29,3 +37,21 @@ $ ffmpeg -i output_file1.mov -i output_file2.mov  -vsync 2 -filter_complex vstac
 
 $ ffmpeg -i output_file1.mov -i output_file2.mov  -vsync 2 -filter_complex vstack=inputs=2:shortest=1 thing.mov
 
+# makes an mp4
+ffmpeg -pattern_type glob -i 'images/*.jpg' movie.mp4
+
+change duration
+ffmpeg -i input.mp4 -filter_complex "setpts=PTS/(120/30);atempo=120/30" output.mp4
+
+
+
+cat *.png | ffmpeg -y -f image2pipe -r 30 -i - -c:v libvpx -pix_fmt yuva420p -metadata:s:v:0 alpha_mode="1"  output.webm
+
+make webm output, also
+ffmpeg -framerate 10 -i images/%03d.png -c:v libvpx-vp9 -pix_fmt yuva420p output.webm
+
+overlay
+ffmpeg -i druid_hill_climb2.mp4 -i movie.mp4 -filter_complex overlay output.mp4
+
+another overlay
+ffmpeg -y -i druid_hill_climb2.mp4 -i movie.mp4 -filter_complex [1]format=rgb24,colorkey=black,colorchannelmixer=aa=0.3,setpts=PTS+8/TB[1d]; [0][1d]overlay=enable='between(t,8, 13)'[v1]; -map [v1] -map 0:a -c:a copy -c:v libx264 -preset ultrafast output.mp4

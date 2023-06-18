@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 import moviepy.editor as mp
-import sys, getopt
+import sys, getopt, os, glob, datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -36,7 +36,8 @@ video = mp.VideoFileClip(mname)
 duration = video.duration
 fps = video.fps
 
-data = parse_data.pad_data_set(data, data_collection_period, start_sec, duration)
+x = parse_data.pad_data_set(data, data_collection_period, start_sec, duration)
+data = x['data']
 
 df = pd.DataFrame(data)
 df_scaled = df.copy()
@@ -66,13 +67,14 @@ for n in the_page['bar_displays']:
     if n == 'phaseA':
         data_types[n] = 'amp'
 
-def create_bargraph(ax, row, place_box):
+def create_bargraph(ax, row, t, place_box):
     labels = []
     values = []
     widths = []
     names = []
     count = 0
     ax.clear() 
+    ax.set_title(title, y=1.0, pad=-14, fontsize=16, color = 'yellow')
     for item in the_page['bar_displays']:
         if the_page['bar_displays'][item]:
             widths.append(bar_width)
@@ -150,8 +152,9 @@ def create_elevation(ax, value, place_box):
     ax.set_thetamin(30)
     ax.set_thetamax(-30)
     ax.grid(False)
-    ax.plot([rad,rad], [0,1], color="black", linewidth=2)
     ax.set_title("Elevation")
+    arr2 = ax.arrow(rad, 0.5, 0, 1, alpha = 0.5, width = 0.15,
+                     edgecolor = 'yellow', facecolor = 'green', lw = 2, zorder = 5)
     if place_box:
         bound_box(ax)
 
@@ -163,37 +166,58 @@ def bound_box(ax):
     ypad = 0.05 * height
     fig.add_artist(plt.Rectangle((x0-xpad, y0-ypad), width+2*xpad, height+2*ypad, edgecolor='red', linewidth=3, fill=False))
 
-def animate(i, total, a0, a1, a2, a3, show_box):
-    print(i, total)
-    # create_bargraph(a0, i, show)
-    # create_temp(a1, 75, the_page['min_temp'], the_page['max_temp'], show)
-    # create_throttle(a2, df['adc1'][i], show)
-    # create_elevation(a3, 20, show)
+def animate(i, total, a0, a1, a2, a3, title, show_box):
+    create_bargraph(a0, i, title, show)
+    create_temp(a1, 75, the_page['min_temp'], the_page['max_temp'], show)
+    create_throttle(a2, df['adc1'][i], show)
+    create_elevation(a3, 20, show)
 
-fig = plt.figure()
-fig.set_figheight(7)
-fig.set_figwidth(4)
-
-gs = gridspec.GridSpec(ncols=3, nrows=2,
-                         width_ratios=[10, 10, 3], wspace=.5, hspace = .5,
-                         height_ratios=[3, 1])
-
-ax0 = fig.add_subplot(gs[0,:-1])
-ax1 = fig.add_subplot(gs[0,2])
-ax2 = fig.add_subplot(gs[1,0], polar=True)
-ax3 = fig.add_subplot(gs[1,1], polar=True)
 
 show = False
 
 key = list(data.keys())[0]
 frames = len(data[key])
 
-ani = animation.FuncAnimation(fig, animate, frames=frames,
-                              fargs=(frames, ax0, ax1, ax2, ax3, show),
-                              interval=100, repeat=False) 
+# matplotlib animation doesnt work: after 200 images or so it bombs out.
+#   workaround: send a pile of images to disk and make video using ffmpeg
+for i in range(frames):
+    fig = plt.figure()
+    
+    t = str(datetime.timedelta(seconds=i/10))
 
-# writervideo = animation.FFMpegWriter(fps=60)
-# ani.save('dummy.mp4', writer=writervideo)
-plt.show()
-plt.close()
+    fig.set_figheight(7)
+    fig.set_figwidth(4)
+
+    gs = gridspec.GridSpec(ncols=3, nrows=2,
+                         width_ratios=[10, 10, 3], wspace=.5, hspace = .5,
+                         height_ratios=[3, 1])
+
+    ax0 = fig.add_subplot(gs[0,:-1])
+    ax1 = fig.add_subplot(gs[0,2])
+    ax2 = fig.add_subplot(gs[1,0], polar=True)
+    ax3 = fig.add_subplot(gs[1,1], polar=True)
+
+    animate(i, frames, ax0, ax1, ax2, ax3, t, show)
+    plt.plot()
+    f = 'images/{0:05d}image.png'.format(i)
+    fig.savefig(f, transparent=True)
+    print (i, frames, f)
+    plt.clf()
+    plt.close('all')
+
+### make transparent webm output
+# os.remove(f)
+# ffmpeg -framerate 10 -pattern_type glob -i "images/*.png" -r 30  -pix_fmt yuva420p -crf 24 output1.webm
+#    note crf is constant frame rate
+
+## change frame rate? ???? ruins transparent!!
+# ffmpeg -i output1.webm -filter:v fps=fps=60 output2.webm
+
+## then, overlay webm on mp4
+# ffmpeg -i druid_hill_climb2.mp4 -c:v libvpx-vp9 -i output1.webm -filter_complex overlay output.mp4
+
+#for f in glob.glob("images/*.jpg"):
+#    os.remove(f)
+
+
 

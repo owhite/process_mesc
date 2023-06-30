@@ -1,0 +1,95 @@
+r
+CMD :: r
+process:: RECORD!
+name :: default.txt
+INIT_RECORD :: RECORD :: get
+RECORD :: [3`Parameter[15`| Value[35`| Min[46`| Max[57`| Description
+RECORD :: [3`[36madc1[15`[37m| [32m0[35`[37m| 0[46`[37m| 4096[57`[37m| Raw ADC throttle
+RECORD :: [3`[36madc1_max[15`[37m| [32m3996[35`[37m| 0[46`[37m| 4096[57`[37m| ADC1 max val
+RECORD :: [3`[36madc1_min[15`[37m| [32m790[35`[37m| 0[46`[37m| 4096[57`[37m| ADC1 min val
+RECORD :: [3`[36madc1_pol[15`[37m| [32m1.000000[35`[37m| -1.00[46`[37m| 1.00[57`[37m| ADC1 polarity
+RECORD :: [3`[36madc2_max[15`[37m| [32m4095[35`[37m| 0[46`[37m| 4096[57`[37m| ADC2 max val
+RECORD :: [3`[36madc2_min[15`[37m| [32m1200[35`[37m| 0[46`[37m| 4096[57`[37m| ADC2 min val
+RECORD :: [3`[36madc2_pol[15`[37m| [32m-1.000000[35`[37m| -1.00[46`[37m| 1.00[57`[37m| ADC2 polarity
+RECORD :: [3`[36mcan_adc[15`[37m| [32m0[35`[37m| 1[46`[37m| 254[57`[37m| can ADC ID
+RECORD :: [3`[36mcurr_max[15`[37m| [32m300.000000[35`[37m| 0.00[46`[37m| 300.00[57`[37m| Max motor current
+RECORD :: [3`[36mcurr_min[15`[37m| [32m0.000000[35`[37m| -300.00[46`[37m| 0.00[57`[37m| Min motor current
+RECORD :: [3`[36mdirection[15`[37m| [32m0[35`[37m| 0[46`[37m| 1[57`[37m| Motor direction
+RECORD :: [3`[36mehz[15`[37m| [32m-0.299200[35`[37m| -inf[46`[37m| inf[57`[37m| Motor electrical hz
+RECORD :: [3`[36menc_offset[15`[37m| [32m25000[35`[37m| 0[46`[37m| 65535[57`[37m| Encoder alignment angle
+RECORD :: [3`[36merror[15`[37m| [32m0[35`[37m| 0[46`[37m| 4294967295[57`[37m| System errors now
+RECORD :: [3`[36merror_all[15`[37m| [32m134217752[35`[37m| 0[46`[37m| 4294967295[57`[37m| All errors encountered
+RECORD :: [3`[36mflux[15`[37m| [32m0.012800[35`[37m| 0.00[46`[37m| 100.00[57`[37m| Flux linkage
+RECORD :: [3`[36mflux_gain[15`[37m| [32m1.131371[35`[37m| 0.00[46`[37m| 100.00[57`[37m| Flux linkage gain
+RECORD :: [3`[36mflux_n_lin[15`[37m| [32m5000.000000[35`[37m| 0.00[46`[37m| 10000.00[57`[37m| Flux centering gain
+RECORD :: [3`[36mfw_curr[15`[37m| [32m80.000000[35`[37m| 0.00[46`[37m| 300.00[57`[37m| Max field weakenning current
+RECORD :: [3`[36mfw_ehz[15`[37m| [32m1000.000000[35`[37m| 0.00[46`[37m| 6000.00[57`[37m| max eHz under field weakenning
+RECORD :: [3`[36mHall_flux[15`[37m| [32mArray[12][35`[37m| -10.00[46`[37m| 10.00[57`[37m| hall start table
+RECORD :: [3`[36mHall_initialised[15`[37m| [32m1[35`[37m| 0[46`[37m| 1[57`[37m| hall start flag
+RECORD :: [3`[36mhfi[15`[37m| [32m0[35`[37m| 0[46`[37m| 3[57`[37m| HFI type [0=None, 1=45deg, 2=d axis]
+RECORD :: [3`[36mhfi_gain[15`[37m| [32m0.000000[35`[37m| 0.00[46`[37m| 5000.00[57`[37m| HFI gain
+RECORD :: [3`[36mhfi_mod_didq[15`[37m| [32m0.000000[35`[37m| 0.00[46`[37m| 2.00[57`[37m| HFI mod didq
+RECORD :: [3`[36mhfi_volt[15`[37m| [32m4.000000[35`[37m| 0.00[46`[37m| 50.00[57`[37m| HFI voltage
+RECORD :: [3`[36mi_max[15`[37m| [32m350.000000[35`[37m| 0.00[46`[37m| 500.00[57`[37m| Max current
+RECORD :: [3`[36mid[15`[37m| [32m0.004016[35`[37m| -inf[46`[37m| inf[57`[37m| Phase Idq_d smoothed
+RECORD :: [3`[36minput_opt[15`[37m| [32m9[35`[37m| 0[46`[37m| 16[57`[37m| Inputs [1=ADC1 2=ADC2 4=PPM 8=UART]
+RECORD :: [3`[36miq[15`[37m| [32m0.039042[35`[37m| -inf[46`[37m| inf[57`[37m| Phase Idq_q smoothed
+RECORD :: [3`[36miqreq[15`[37m| [32m0.000000[35`[37m| -4096.00[46`[37m| 4096.00[57`[37m| mtr[0].FOC.Idq_req.q
+RECORD :: [3`[36mld_phase[15`[37m| [32m0.000087[35`[37m| 0.00[46`[37m| 10.00[57`[37m| Phase inductance
+RECORD :: [3`[36mlq_phase[15`[37m| [32m0.000099[35`[37m| 0.00[46`[37m| 10.00[57`[37m| Phase inductance
+RECORD :: [3`[36mmotor_pp[15`[37m| [32m7[35`[37m| 0[46`[37m| 30[57`[37m| Number of motor pole PAIRS
+RECORD :: [3`[36mmotor_sensor[15`[37m| [32m0[35`[37m| 0[46`[37m| 30[57`[37m| 0=SL, 1=Hall, 2=OL, 3=ENC, 4=HFI
+RECORD :: [3`[36mnode_id[15`[37m| [32m0[35`[37m| 1[46`[37m| 254[57`[37m| Node ID
+RECORD :: [3`[36mol_step[15`[37m| [32m0[35`[37m| 0[46`[37m| 6000[57`[37m| Angle per PWM period openloop
+RECORD :: [3`[36mp_max[15`[37m| [32m12000.000000[35`[37m| 0.00[46`[37m| 50000.00[57`[37m| Max power
+RECORD :: [3`[36mpole_pairs[15`[37m| [32m7[35`[37m| 0[46`[37m| 255[57`[37m| Motor pole pairs
+RECORD :: [3`[36mpwm_freq[15`[37m| [32m20000.000000[35`[37m| 0.00[46`[37m| 100000.00[57`[37m| PWM frequency
+RECORD :: [3`[36mr_phase[15`[37m| [32m0.008000[35`[37m| 0.00[46`[37m| 10.00[57`[37m| Phase resistance
+RECORD :: [3`[36mrpm_max[15`[37m| [32m0[35`[37m| 0[46`[37m| 300000[57`[37m| Max RPM
+RECORD :: [3`[36msafe_count[15`[37m| [32m100[35`[37m| 0[46`[37m| 1000[57`[37m| Live count before allowing throttle
+RECORD :: [3`[36msafe_start[15`[37m| [32m100[35`[37m| 0[46`[37m| 1000[57`[37m| Countdown before allowing throttle
+RECORD :: [3`[36mTMOS[15`[37m| [32m0.000000[35`[37m| 0.00[46`[37m| 4096.00[57`[37m| MOSFET temp, kelvin
+RECORD :: [3`[36mTMOT[15`[37m| [32m0.000000[35`[37m| 0.00[46`[37m| 4096.00[57`[37m| Motor temp, kelvin
+RECORD :: [3`[36muart_req[15`[37m| [32m0.000000[35`[37m| -1000.00[46`[37m| 1000.00[57`[37m| Uart input
+RECORD :: [3`[36mv_max[15`[37m| [32m0.000000[35`[37m| 0.00[46`[37m| 600.00[57`[37m| Max voltage
+RECORD :: [3`[36mvbus[15`[37m| [32m56.719166[35`[37m| 0.00[46`[37m| inf[57`[37m| Read input voltage
+RECORD :: [3`[36mVd[15`[37m| [32m2.211683[35`[37m| -4096.00[46`[37m| 4096.00[57`[37m| FOC_Vdq_d
+RECORD :: [3`[36mVq[15`[37m| [32m0.730074[35`[37m| -4096.00[46`[37m| 4096.00[57`[37m| FOC_Vdq_q
+RECORD :: 
+RECORD :: [34muart[0m@MESC>
+TIMEOUT :: status json
+RECORD :: 
+RECORD :: [34muart[0m@MESC>{"adc1":0,"ehz":-0.293,"error{"adc1":0,"ehz":0.296,"error":0,"id":-0.013,"iq":0.110,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.719,"Vd":2.147,"Vq":0.693}
+RECORD :: 19
+{"adc1":0,"ehz":-0.238,"error":0,"id":0.002,"iq":0.108,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.744,"Vd":2.175,"Vq":0.680}
+RECORD :: 0
+{"adc1":0,"ehz":0.186,"error":0,"id":0.004,"iq":0.149,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.795,"Vd":2.147,"Vq":0.710}
+RECORD :: 0
+{"adc1":0,"ehz":0.299,"error":0,"id":0.000,"iq":0.141,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.770,"Vd":2.179,"Vq":0.689}
+RECORD :: 0
+{"adc1":0,"ehz":-0.241,"error":0,"id":0.016,"iq":0.131,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.795,"Vd":2.163,"Vq":0.696}
+RECORD :: 0
+{"adc1":0,"ehz":-0.079,"error":0,"id":-0.043,"iq":0.108,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.770,"Vd":2.135,"Vq":0.688}
+RECORD :: 0
+{"adc1":0,"ehz":0.018,"error":0,"id":-0.008,"iq":0.117,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.820,"Vd":2.175,"Vq":0.714}
+RECORD :: 0
+{"adc1":0,"ehz":0.040,"error":0,"id":0.030,"iq":0.157,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.744,"Vd":2.159,"Vq":0.696}
+RECORD :: 0
+{"adc1":0,"ehz":-0.095,"error":0,"id":-0.022,"iq":0.155,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.744,"Vd":2.179,"Vq":0.692}
+RECORD :: 0
+{"adc1":0,"ehz":0.146,"error":0,"id":-0.040,"iq":0.151,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.744,"Vd":2.163,"Vq":0.721}
+RECORD :: 0
+{"adc1":0,"ehz":-0.198,"error":0,"id":-0.008,"iq":0.142,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.694,"Vd":2.147,"Vq":0.688}
+RECORD :: 0
+{"adc1":0,"ehz":0.256,"error":0,"id":-0.037,"iq":0.095,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.694,"Vd":2.163,"Vq":0.679}
+RECORD :: 0
+{"adc1":0,"ehz":-0.305,"error":0,"id":0.018,"iq":0.107,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.770,"Vd":2.147,"Vq":0.680}
+RECORD :: 0
+{"adc1":0,"ehz":0.253,"error":0,"id":0.009,"iq":0.107,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.744,"Vd":2.244,"Vq":0.696}
+RECORD :: 0
+{"adc1":0,"ehz":-0.195,"error":0,"id":0.012,"iq":0.101,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.744,"Vd":2.179,"Vq":0.692}
+RECORD :: 0
+{"adc1":0,"ehz":0.143,"error":0,"id":-0.013,"iq":0.150,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":56.719,"Vd":2.147,"Vq":0.664}
+RECORD :: 0
+e
+CMD :: e

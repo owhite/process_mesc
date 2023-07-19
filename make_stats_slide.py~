@@ -9,8 +9,6 @@ from matplotlib import gridspec
 import numpy as np
 import parse_data # helper script
 
-# {"adc1":740,"ehz":0.161,"error":0,"id":0.197,"iq":0.094,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":72.481,"Vd":1.928,"Vq":0.586},
-
 def create_bargraph(ax, row, t, data, df, df_scaled, specs, place_box):
     labels = []
     values = []

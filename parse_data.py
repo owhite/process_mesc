@@ -1,5 +1,6 @@
 import urllib.request
 import json
+import re
 
 def get_web_page(req):
     try: urllib.request.urlopen(req)
@@ -12,8 +13,8 @@ def get_web_page(req):
         
 def get_json_file(fname):
     with open(fname, 'r') as fcc_file:
-        the_page = json.load(fcc_file)
-        return(the_page)
+        page = json.load(fcc_file, strict=False)
+        return(page)
 
 def make_frame(lines): 
     names = []
@@ -61,3 +62,42 @@ def pad_data_set(array, speed, start_s, vid_len):
 
 
     return(d)
+
+def strip_vt100_commands (str):
+    cmds = {
+        '[32m': '',
+        '[35m': '',
+        '[36m': '',
+        '[37m': '',
+        '[46m': '',
+        '[15': '',
+        '[35': '',
+        '[46': '',
+        '[57': '',
+        '[3': '', # put this last
+        '`': ''}
+    for key, value in cmds.items():
+        str = re.sub('^[0-9: \.]*', '', str)
+        str = str.replace(key, value)
+        str = re.sub('\| ', '\t', str)
+
+    return(str)
+
+# meaning: parse all the results that come from Jens' get call to the terminal
+def load_get_response(lines):
+    d = {}
+    for line in lines.split('\n'):
+
+        mapping =  dict.fromkeys(range(32))
+        line = line.translate(mapping)
+        line = strip_vt100_commands(line)
+
+        if (line.count('\t')) == 4: 
+            l = line.split('\t');
+            d[l[0]] = {}
+            d[l[0]]['value'] = l[1]
+            d[l[0]]['min']   = l[2]
+            d[l[0]]['max']   = l[3]
+            d[l[0]]['desc']  = l[4]
+    return(d)
+

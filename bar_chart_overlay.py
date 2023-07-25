@@ -9,7 +9,10 @@ from matplotlib import gridspec
 import numpy as np
 import parse_data # helper script
 
-# {"adc1":740,"ehz":0.161,"error":0,"id":0.197,"iq":0.094,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":72.481,"Vd":1.928,"Vq":0.586},
+# this program takes data like this:
+#  {"adc1":740,"ehz":0.161,"error":0,"id":0.197,"iq":0.094,"iqreq":0.000,"TMOS":0.000,"TMOT":0.000,"vbus":72.481,"Vd":1.928,"Vq":0.586},
+# and makes a series of images that will be used in an overlay for a movie
+
 
 def create_bargraph(ax, row, t, data, df, df_scaled, specs, place_box):
     labels = []
@@ -168,40 +171,28 @@ def manage_files():
 def main():
     (page, config) = manage_files()
 
-    title = config['title']
-    mname = config['movie']
-
     data = parse_data.make_frame(page['data'])
-    x = parse_data.pad_data_set(data, config['data_collection_period'], config['start_sec'], config['movie_duration'])
+    x = parse_data.pad_data_set(data,
+                                config['data_collection_period'], 
+                                config['start_sec'],
+                                config['movie_duration'])
     data = x['data']
 
     key = list(data.keys())[0]
     frames = len(data[key])
 
-    blob = parse_data.load_get_response(page['blob'])
-    values = ('curr_max', 'fw_curr', 'fw_ehz', 'i_max', 'p_max')
-    # These are MESC variables  to send to:
-    # cat variables | convert -background black xc:none -fill yellow  -size 600x300 -pointsize 30 -gravity Center label:@- thing.jpeg
-    for v in values:
-        e = blob[v]
-        e['desc'] = e['desc'].replace('weakenning', 'weakening')
-        e['desc'] = e['desc'].replace('eHz under field weakening', 'field weakening eHz')
-        e['desc'] = e['desc'].replace('max', 'Max')
-
-        print(('{} = {:d} ({})').format(e['desc'], int(float(e['value'])), v))
-
-    show = False
-
-    # matplotlib animation doesnt work: after 200 images or so it bombs out.
-    #   workaround: send a pile of images to disk and make video using ffmpeg
-    #   here we go..
+    # matplotlib animation doesnt work -- it bombs after  200 images or so. 
+    #   the workaround is to send a pile of images to disk and make video using 
+    #   ffmpeg. here we go..
+    # this may be unnecessary, ffmpeg probably has a work around to combine videoes
+    #   at a certain start point. 
     for i in range(frames):
         fig = plt.figure()
     
         t = str(datetime.timedelta(seconds=i/10))
 
         fig.set_figheight(config['fig_height'])
-        fig.set_figwidth(config['fig_width'])
+        fig.set_figwidth(config['fig_width'] / 4) 
 
         gs = gridspec.GridSpec(ncols=3, nrows=2,
                          width_ratios=[10, 10, 3], wspace=.5, hspace = .5,
@@ -212,14 +203,13 @@ def main():
         ax2 = fig.add_subplot(gs[1,0], polar=True)
         ax3 = fig.add_subplot(gs[1,1], polar=True)
 
-        animate(i, frames, ax0, ax1, ax2, ax3, t, data, config, show)
+        animate(i, frames, ax0, ax1, ax2, ax3, t, data, config, False)
         plt.plot()
         f = 'images/{0:05d}image.png'.format(i)
         fig.savefig(f, transparent=True)
         print (('{} of {}, {}').format(i, frames, f))
         plt.clf()
         plt.close('all')
-    
 
 if __name__ == "__main__":
     main()

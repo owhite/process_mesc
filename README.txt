@@ -31,20 +31,46 @@ Willful destruction of the MP2. The following is a plot of an XXX minute hill cl
 
 Many thanks to @badgineer (MP2), @mxlemming (patience and MESC code), @netzpfuscher (MESC terminal), and Rob if youre out there (thermistor code). 
 
+------------------------------
 
+This fixed pytube to work on my mac
 
-Duration needed:
-181 - 67s = 114
+python -m pip install git+https://github.com/Zeecka/pytube@fix_1060
+pip install --upgrade pytube
 
-### make transparent webm output
-ffmpeg -framerate 10 -pattern_type glob -i "images/*.png" -r 30  -pix_fmt yuva420p output.webm
+------------------------------
+## create a series of slides for overlay
+$ ./bar_chart_overlay.py -d scrap.json -c config.json 
 
-## then, overlay webm on mp4
-ffmpeg -i druid_hill_climb2.mp4 -c:v libvpx-vp9 -i output.webm -filter_complex overlay output.mp4
+## use those slides to make transparent webm output
+$ ffmpeg -framerate 10 -pattern_type glob -i "images/*.png" -r 30  -pix_fmt yuva420p output.webm
+
+## retreive youtube video
+$ ./download_movie.py -c config.json -o thing.mp4
+
+## perform overlay of file output.webm on to thing.mp4
+$ ffmpeg -i thing.mp4 -c:v libvpx-vp9 -i output.webm -filter_complex overlay output.mp4
+
+## create two pics then fade them in and out to create a movie
+$ ./make_stats_slide.py -d scrap.json -c config.json -o test
+
+## creates amp / ehz etc...
+$ ./plot_amps.py -c config.json -d json_files/may21_1.json -o thing.png
+
+NOT WORKING: 
+$ ffmpeg -i "test.mp4" -f lavfi -i aevalsrc=0 -shortest -y "new_test.mp4"
+$ ffmpeg -i "output.mp4" -f lavfi -i aevalsrc=0 -shortest -y "new_output.mp4"
+
+$ ffmpeg -f concat -safe 0 -i new_test.mp4 -i new_output.mp4 -c copy output2.mp4
+$ ffmpeg -i new_test.mp4 -i new_output.mp4 -f concat -safe 0 -c copy output2.mp4
+
+ffmpeg -i "concat:new_test.mp4|new_output.mp4" -c copy output10.mp4
+
+------------------------------
+LOTS OF OLD FFMPEG ATTEMPTS:
 
 Use this in scroll_plot to stretch to correct duration
 writervideo = animation.FFMpegWriter(fps=8.18)
-
 
 I think this changes framerate
 ffmpeg -i process_mesc/druid_hill_climb2.mp4 -filter:v fps=fps=60 output1.mp4
@@ -83,15 +109,13 @@ cat *.png | ffmpeg -y -f image2pipe -r 30 -i - -c:v libvpx -pix_fmt yuva420p -me
 make webm output, also
 ffmpeg -framerate 10 -i images/%03d.png -c:v libvpx-vp9 -pix_fmt yuva420p output.webm
 
+** ffmpeg -framerate 10 -pattern_type glob -i 'images/*.png' -c:v libvpx-vp9 -pix_fmt yuva420p output.webm
+
+** % ./pytube_test.py 
+
 overlay
 ffmpeg -i druid_hill_climb2.mp4 -i movie.mp4 -filter_complex overlay output.mp4
 
 another overlay
 ffmpeg -y -i druid_hill_climb2.mp4 -i movie.mp4 -filter_complex [1]format=rgb24,colorkey=black,colorchannelmixer=aa=0.3,setpts=PTS+8/TB[1d]; [0][1d]overlay=enable='between(t,8, 13)'[v1]; -map [v1] -map 0:a -c:a copy -c:v libx264 -preset ultrafast output.mp4
 
-------------------------------
-
-https://superuser.com/questions/833232/create-video-with-5-images-with-fadein-out-effect-in-ffmpeg
-
-This takes two pics fades them in and out to create a movie
-ffmpeg -loop 1 -t 5 -i thing1.png -loop 1 -t 5 -i thing2.png -filter_complex "[0:v]fade=t=out:st=4:d=1[v0]; [1:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[v1]; [v0][v1]concat=n=2:v=1:a=0,format=yuv420p[v]" -map "[v]" out.mp4

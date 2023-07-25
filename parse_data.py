@@ -34,13 +34,13 @@ def make_frame(lines):
         
     return(my_dict)
 
-def pad_data_set(array, speed, start_s, vid_len):
+def pad_data_set(array, collection_speed, start_s, vid_len):
     key = list(array.keys())[0]
     row = array[key]
-    data_sec = len(row) / speed
+    data_sec = len(row) / collection_speed
     end_sec = vid_len - start_s - data_sec
-    front_pad = int(start_s * speed)
-    end_pad = int(end_sec * speed)
+    front_pad = int(start_s * collection_speed)
+    end_pad = int(end_sec * collection_speed)
 
     d = {}
     d['data'] = array
@@ -55,10 +55,10 @@ def pad_data_set(array, speed, start_s, vid_len):
         array[item] = l1 + row + l2
 
     print('data length {0}(secs) {1}(frames)'.format(data_sec, len(row)))
-    print('video length: {0}(secs) {1}(data_frames)'.format(vid_len, int(vid_len*speed)))
+    print('video length: {0}(secs) {1}(data_frames)'.format(vid_len, int(vid_len*collection_speed)))
     print('adding {0}(secs) {1}(frames) to beginning'.format(start_s, front_pad))
     print('adding {0}(secs) {1}(frames) to end'.format(end_sec, end_pad))
-    print('{0}(secs) {1}(frames) final dataset'.format(len(array[item]) / speed, len(array[item])))
+    # print('{0}(secs) {1}(frames) final dataset'.format(len(array[item]) / collection_speed, len(array[item])))
 
 
     return(d)

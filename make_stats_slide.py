@@ -44,11 +44,11 @@ def main():
     blob = parse_data.load_get_response(page['blob'])
     values = ('curr_max', 'fw_curr', 'fw_ehz', 'i_max', 'p_max')
 
-    tmp_file1 = "scrap1.png"
-    tmp_file2 = "scrap2.png"
+    tmp_file1 = output_file + '_1.png'
+    tmp_file2 = output_file + '_2.png'
 
     str = ""
-    str = "convert -background black -fill yellow  -size 600x300 -pointsize 60 -gravity Center label:\"" + config['title'] + "\" " + tmp_file1
+    str = "convert -background black -fill yellow  -size 1280x720 -pointsize 60 -gravity Center label:\"" + config['movie_title'] + "\" " + tmp_file1
 
     print("RUNNING: " + str)
     cp = subprocess.run([str], shell=True)
@@ -63,12 +63,12 @@ def main():
         str = str + ('{} = {:d} ({})').format(e['desc'], int(float(e['value'])), v) + "\\n"
 
     str = "\"" + str + "\""
-    str = "convert -background black -fill yellow  -size 600x300 -pointsize 30 -gravity Center label:" + str + " " + tmp_file2
+    str = "convert -background black -fill yellow  -size 1280x720 -pointsize 30 -gravity Center label:" + str + " " + tmp_file2
     print("RUNNING: " + str)
     
     cp = subprocess.run([str], shell=True)
 
-    str = "ffmpeg -loop 1 -t 5 -i " + tmp_file1 + " -loop 1 -t 5 -i " + tmp_file2 + " -filter_complex \"[0:v]fade=t=out:st=4:d=1[v0]; [1:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[v1]; [v0][v1]concat=n=2:v=1:a=0,format=yuv420p[v]\" -map \"[v]\" " + output_file
+    str = "ffmpeg -loop 1 -t 5 -i " + tmp_file1 + " -loop 1 -t 5 -i " + tmp_file2 + " -filter_complex \"[0:v]fade=t=out:st=4:d=1[v0]; [1:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[v1]; [v0][v1]concat=n=2:v=1:a=0,format=yuv420p[v]\" -map \"[v]\" " + output_file + ".mp4"
 
     print("RUNNING: " + str)
     cp = subprocess.run([str], shell=True)

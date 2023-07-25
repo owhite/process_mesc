@@ -1,0 +1,3 @@
+# videos.txt
+file new_test.mp4
+file new_output.mp4

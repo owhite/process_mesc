@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 
 import json
-import sys, getopt
+import sys, getopt, os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import parse_data # helper script
+import subprocess
 
 # URL = input()
 # URL = 'https://raw.githubusercontent.com/owhite/ebike_data/main/datasets/first_set'
@@ -89,6 +90,32 @@ ax3.set_ylim(config['min_vals']['adc1'], config['max_vals']['adc1'])
 ax3.plot(t, df[datatype], color=color, label = datatype)
 fig.legend(loc = "upper left")
 
-print("saving: " + oname)
-plt.savefig(oname)
+tmp_file1 = oname + "1.png"
+tmp_file2 = oname + "2.png"
+
+plt.savefig(tmp_file1)
 plt.close(fig)
+
+str = 'ffmpeg -i {0} -vf scale={1} {2}'.format(tmp_file1, config['movie_size'], tmp_file2)
+
+print("RUNNING: " + str)
+cp = subprocess.run([str], shell=True)
+
+str = ('ffmpeg -loop 1 -t 5 -i {0} -filter_complex \"[0:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[v0];  [v0]concat=n=1:v=1:a=0,format=yuv420p[v]\" -map \"[v]\" {1}').format(tmp_file2, oname + ".mp4")
+
+print("RUNNING: " + str)
+cp = subprocess.run([str], shell=True)
+
+try: 
+    os.remove(tmp_file1)
+except OSError:
+    pass
+
+try: 
+    os.remove(tmp_file2)
+except OSError:
+    pass
+
+
+
+            

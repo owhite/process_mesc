@@ -102,6 +102,8 @@ $ cat credits.txt | magick -gravity Center -background black -fill yellow -size 
 # make a video, this is the wrong size and will look like static in the last step.
 $ ffmpeg -loop 1 -t 5 -i static.png -filter_complex "[0:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[v0];  [v0]concat=n=1:v=1:a=0,format=yuv420p[v]" -map "[v]" static.mp4
 
+# combine all v
+
 $ ./combine.py output1.mp4 premovie.mp4 movie.mp4 aftermovie.mp4 credits.mp4 static.mp4
 
 

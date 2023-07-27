@@ -5,9 +5,10 @@
     "fig_height": 7,
     "fig_width": 10,
     "movie_URL": "https://youtu.be/UQB3h4kRCKc", 
+    "movie_size": "1280x720", 
     "start_sec": 10.0, 
     "data_collection_period": 10.0, 
-    "movie_duration": 107.0,
+    "movie_duration": 75.81,
     "max_vals": 
 	{
 	    "adc1":     4200.0,

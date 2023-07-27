@@ -48,27 +48,29 @@ def main():
     tmp_file2 = output_file + '_2.png'
 
     str = ""
-    str = "convert -background black -fill yellow  -size 1280x720 -pointsize 60 -gravity Center label:\"" + config['movie_title'] + "\" " + tmp_file1
+    str = 'convert -background black -fill yellow  -size {0} -pointsize 60 -gravity Center label:\"{1}\" {2}'.format(config['movie_size'], config['movie_title'], tmp_file1)
 
     print("RUNNING: " + str)
     cp = subprocess.run([str], shell=True)
 
-    str = ""
+    caption = ""
     for v in values:
         e = blob[v]
         e['desc'] = e['desc'].replace('weakenning', 'weakening')
         e['desc'] = e['desc'].replace('eHz under field weakening', 'field weakening eHz')
         e['desc'] = e['desc'].replace('max', 'Max')
 
-        str = str + ('{} = {:d} ({})').format(e['desc'], int(float(e['value'])), v) + "\\n"
+        caption = caption + ('{} = {:d} ({})').format(e['desc'], int(float(e['value'])), v) + "\\n"
 
-    str = "\"" + str + "\""
-    str = "convert -background black -fill yellow  -size 1280x720 -pointsize 30 -gravity Center label:" + str + " " + tmp_file2
+    caption = "\"" + caption + "\""
+
+    str = 'convert -background black -fill yellow  -size {0} -pointsize 30 -gravity Center label:{1} {2}'.format(config['movie_size'], caption, tmp_file2)
+
     print("RUNNING: " + str)
     
     cp = subprocess.run([str], shell=True)
 
-    str = "ffmpeg -loop 1 -t 5 -i " + tmp_file1 + " -loop 1 -t 5 -i " + tmp_file2 + " -filter_complex \"[0:v]fade=t=out:st=4:d=1[v0]; [1:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[v1]; [v0][v1]concat=n=2:v=1:a=0,format=yuv420p[v]\" -map \"[v]\" " + output_file + ".mp4"
+    str = 'ffmpeg -loop 1 -t 5 -i  {0} -loop 1 -t 5 -i {1} -filter_complex \"[0:v]fade=t=out:st=4:d=1[v0]; [1:v]fade=t=in:st=0:d=1,fade=t=out:st=4:d=1[v1]; [v0][v1]concat=n=2:v=1:a=0,format=yuv420p[v]\" -map \"[v]\" {2}.mp4'.format(tmp_file1, tmp_file2, output_file)
 
     print("RUNNING: " + str)
     cp = subprocess.run([str], shell=True)

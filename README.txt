@@ -31,7 +31,18 @@ Willful destruction of the MP2. The following is a plot of an XXX minute hill cl
 
 Many thanks to @badgineer (MP2), @mxlemming (patience and MESC code), @netzpfuscher (MESC terminal), and Rob if youre out there (thermistor code). 
 
-------------------------------
+
+-------------------------------
+Dependencies:
+ffmpeg
+
+Python modules:
+mapplotlib
+matplotlib
+moviepy
+pandas
+
+-------------------------------
 
 This fixed pytube to work on my mac
 
@@ -76,6 +87,8 @@ max and min_vals refer to details of your controller
 $ ./bar_chart_overlay.py -d scrap.json -c config.json 
 
 ## use those slides to make transparent webm output
+#  these types of steps could be done in the python programs but it's better to review
+#  the intermediate results
 $ ffmpeg -framerate 10 -pattern_type glob -i "images/*.png" -r 30  -pix_fmt yuva420p overlay.webm
 
 ## perform overlay of file output.webm on to thing.mp4
@@ -104,4 +117,20 @@ $ ffmpeg -loop 1 -t 5 -i static.png -filter_complex "[0:v]fade=t=in:st=0:d=1,fad
 
 $ ./combine.py output1.mp4 premovie.mp4 movie.mp4 aftermovie.mp4 credits.mp4 static.mp4
 
+
+------------------------------
+rpm(motor) = (ehz * 60) / pp
+rpm(wheel) = (ehz * 60) / (pp * gear_ratio)
+drpm(wheel) = rpm * circumference = (ehz * 60 * circumference) / (pp * 9.82)
+drpm * minutes = distance traveled per minute = (dtpm)
+dtpm = (ehz * 60 * circumference) / (pp * 9.82 * 60)
+dtpms = (ehz * 60 * circumference) / (pp * 9.82 * 60 * 10)
+circumference = 219.5
+pp = 7
+dtpms = (ehz * 60 * 219.5) / (7 * 9.82 * 60 * 10)
+dtpms = ehz * (13170 / 41244)
+
+distance traveled on a 219.5mm circuference tire for 1/10sec at given
+dtpms = ehz * .31931 (cm)
+dtpms = ehz * 3.1931 (mm)
 

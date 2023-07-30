@@ -9,6 +9,9 @@
     "start_sec": 10.0, 
     "data_collection_period": 10.0, 
     "movie_duration": 75.81,
+    "gear_ratio": 9.82,
+    "tire_circumference": 219.5,
+    "pole_pair": 7,
     "max_vals": 
 	{
 	    "adc1":     4200.0,
